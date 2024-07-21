@@ -1,7 +1,42 @@
 ﻿@page "/todo-list"
+@using TodoListWasm.Components
 
-<h3>TodoList @name</h3>
+<h3>TodoList</h3>
 
-@code {
-    string name = "Nguyễn Thành";
+@if (myTaskDTOs == null)
+{
+    <Loading></Loading>
+} 
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                @* <th>STT</th> *@
+                <th>Name</th>
+                <th>Description</th>
+                <th>AssigneName</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Create Date</th>
+                <th>Function</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < myTaskDTOs.Count; i++)
+            {
+                <tr>
+                    @* <td>@(i++)</td> *@
+                    <td>@myTaskDTOs[i].Name</td>
+                    <td>@myTaskDTOs[i].Description</td>
+                    <td>@(myTaskDTOs[i].AssigneeName ?? "N/A")</td>
+                    <td>@myTaskDTOs[i].Priority</td>
+                    <td>@myTaskDTOs[i].Status</td>
+                    <td>@myTaskDTOs[i].CreatedDate.ToString("dd/MM/yyyy")</td>
+                    <td><a href="/task-detail/@myTaskDTOs[i].Id">Detail</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
+

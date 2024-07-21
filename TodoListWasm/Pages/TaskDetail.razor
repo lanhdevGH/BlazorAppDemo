@@ -1,0 +1,37 @@
+﻿@page "/task-detail/{TaskId}"
+@using TodoListWasm.Components;
+@if (taskDTO == null)
+{
+    <Loading></Loading>
+}
+else
+{
+    <h1>@taskDTO.Name</h1>
+    <table class="table">
+        <tr>
+            <td>ID: </td>
+            <td>@taskDTO.Id</td>
+        </tr>
+        <tr>
+            <td>Name: </td>
+            <td>@taskDTO.Name</td>
+        </tr>
+        <tr>
+            <td>Assignee: </td>
+            <td>@(taskDTO.AssigneeName ?? "N/A")</td>
+        </tr>
+        <tr>
+            <td>Create Date: </td>
+            <td>@taskDTO.CreatedDate.ToString("dd/MM/yyyy")</td>
+        </tr>
+        <tr>
+            <td>Priority: </td>
+            <td>@taskDTO.Priority.ToString()</td>
+        </tr>
+        <tr>
+            <td>Status: </td>
+            <td>@taskDTO.Status.ToString()</td>
+        </tr>
+
+    </table>
+}

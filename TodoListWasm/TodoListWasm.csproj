@@ -15,4 +15,8 @@
     <Folder Include="wwwroot\sample-data\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TodoList.Lib\TodoList.Lib.csproj" />
+  </ItemGroup>
+
 </Project>

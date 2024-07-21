@@ -3,6 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using TodoList.Api.Configurations;
 using TodoList.Api.Data;
 using TodoList.Api.Entities;
+using TodoList.Api.Repositories;
+using TodoList.Api.Repositories.Implements;
+using TodoList.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,11 +25,30 @@ builder.Services.AddIdentity<User, Role>()
     .AddEntityFrameworkStores<TodoListDb>()
     .AddDefaultTokenProviders();
 
+// Add repositories manually
+builder.Services.AddScoped<IMyTaskRepository, MyTaskRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+//builder.Services.AddScoped<IRepository<MyTask>, Repository<MyTask>>();
+//builder.Services.AddScoped<IRepository<User>, Repository<User>>();
+// Service
+builder.Services.AddScoped<IMyTaskService, MyTaskService>();
+builder.Services.AddScoped<IUserService, UserService>();
+
 // Add services to the container.
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+// Configure CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAnyOrigin",
+        //builder => builder.WithOrigins("https://example.com")
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
+});
 
 
 var app = builder.Build();
@@ -57,6 +79,8 @@ using (var scope = app.Services.CreateScope())
 
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowAnyOrigin");
 
 app.UseAuthorization();
 

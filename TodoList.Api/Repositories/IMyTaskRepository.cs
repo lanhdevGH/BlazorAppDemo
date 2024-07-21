@@ -1,11 +1,18 @@
-﻿using System.Collections;
+
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using TodoList.Api.Entities;
-using TodoList.Api.Enums;
 
 namespace TodoList.Api.Repositories
 {
-    public interface IMyTaskRepository : IRepository<MyTask>
+    public interface IMyTaskRepository 
     {
-        Task<IEnumerable<MyTask>> GetTasksByPriorityAsync(Priority priority);
+        Task<MyTask> GetByIdAsync(Guid id);
+        Task<IEnumerable<MyTask>> GetAllAsync();
+        Task<IEnumerable<MyTask>> FindAsync(Expression<Func<MyTask, bool>> predicate);
+        Task AddAsync(MyTask entity);
+        Task UpdateAsync(MyTask entity);
+        Task DeleteAsync(MyTask entity);
     }
 }
+            

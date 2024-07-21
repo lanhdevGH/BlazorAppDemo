@@ -1,49 +1,99 @@
-﻿using TodoList.Api.Entities;
-using TodoList.Api.Enums;
-using TodoList.Api.Repositories.Impl;
+using TodoList.Api.Entities;
+using TodoList.Api.Repositories;
+using TodoList.Lib.DTO;
 
 namespace TodoList.Api.Services
 {
-    public class MyTaskService
+    public class MyTaskService : IMyTaskService
     {
-        private readonly MyTaskRepository _myTaskRepository;
-        public MyTaskService(MyTaskRepository myTaskRepository)
+        private readonly IMyTaskRepository _repoMyTaskRepository;
+        public MyTaskService(IMyTaskRepository MyTaskRepository)
         {
-            _myTaskRepository = myTaskRepository;
+            _repoMyTaskRepository = MyTaskRepository;
         }
 
-        public async Task<IEnumerable<MyTask>> GetAllTasksAsync()
+        public async Task AddMyTaskAsync(MyTaskDTO myTaskDTO)
         {
-            return await _myTaskRepository.GetAllAsync();
-        }
-
-        public async Task<MyTask> GetMyTaskAsync(Guid id)
-        {
-            return await _myTaskRepository.GetByIdAsync(id);
-        }
-
-        public async Task<IEnumerable<MyTask>> GetMyTasksByPriority(Priority priority)
-        {
-            return await _myTaskRepository.GetTasksByPriorityAsync(priority);
-        }
-
-        public async Task AddMyTaskAsync(MyTask task)
-        {
-            await _myTaskRepository.AddAsync(task);
-        }
-
-        public async Task UpdateMyTaskAsync(MyTask myTask)
-        {
-            await _myTaskRepository.UpdateAsync(myTask);
-        }
-
-        public async Task DeleteMyTaskAsync(MyTask myTask)
-        {
-            var taskDelete = await _myTaskRepository.GetByIdAsync(myTask.Id);
-            if (taskDelete != null)
+            var task = new MyTask()
             {
-                await _myTaskRepository.DeleteAsync(taskDelete);
+                Id = myTaskDTO.Id,
+                Name = myTaskDTO.Name,
+                Description = myTaskDTO.Description,
+                AssigneeID = myTaskDTO.AssigneeID,
+                CreatedDate = myTaskDTO.CreatedDate,
+                UpdatedDate = myTaskDTO.UpdatedDate,
+                Priority = myTaskDTO.Priority,
+                Status = myTaskDTO.Status
+            };
+
+            await _repoMyTaskRepository.AddAsync(task);
+        }
+
+        public async Task DeleteMyTaskAsync(Guid id)
+        {
+            var taskDel = await _repoMyTaskRepository.GetByIdAsync(id);
+            if (taskDel != null)
+            {
+                await _repoMyTaskRepository.DeleteAsync(taskDel);
             }
+        }
+
+        public async Task<IEnumerable<MyTaskDTO>> GetAllMyTasksAsync()
+        {
+            var tasks = await _repoMyTaskRepository.GetAllAsync();
+            var taskDTOs = new List<MyTaskDTO>();
+
+            foreach (var task in tasks)
+            {
+                var taskDTO = new MyTaskDTO()
+                {
+                    Id = task.Id,
+                    Name = task.Name,
+                    Description = task.Description,
+                    AssigneeID = task.AssigneeID,
+                    AssigneeName = task.Assignee?.UserName,
+                    CreatedDate = task.CreatedDate,
+                    UpdatedDate = task.UpdatedDate,
+                    Priority = task.Priority,
+                    Status = task.Status
+                };
+                taskDTOs.Add(taskDTO);
+            }
+            return taskDTOs;
+        }
+
+        public async Task<MyTaskDTO> GetMyTaskByIdAsync(Guid id)
+        {
+            var task = await _repoMyTaskRepository.GetByIdAsync(id);
+            var taskDTO = new MyTaskDTO()
+            {
+                Id = task.Id,
+                Name = task.Name,
+                Description = task.Description,
+                AssigneeID = task.AssigneeID,
+                CreatedDate = task.CreatedDate,
+                UpdatedDate = task.UpdatedDate,
+                Priority = task.Priority,
+                Status = task.Status
+            };
+
+            return taskDTO;
+        }
+
+        public async Task UpdateMyTaskAsync(MyTaskDTO myTaskDTO)
+        {
+            var task = new MyTask()
+            {
+                Id = myTaskDTO.Id,
+                Name = myTaskDTO.Name,
+                Description = myTaskDTO.Description,
+                AssigneeID = myTaskDTO.AssigneeID,
+                CreatedDate = myTaskDTO.CreatedDate,
+                UpdatedDate = myTaskDTO.UpdatedDate,
+                Priority = myTaskDTO.Priority,
+                Status = myTaskDTO.Status,
+            };
+            await _repoMyTaskRepository.UpdateAsync(task);
         }
     }
 }
