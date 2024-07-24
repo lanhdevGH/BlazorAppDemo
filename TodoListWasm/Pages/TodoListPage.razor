@@ -1,0 +1,87 @@
+﻿@page "/todo-list"
+@using TodoListWasm.Components
+@using TodoList.Lib.Enums
+
+<h3>TodoList</h3>
+
+@if (myTaskDTOs == null)
+{
+    <Loading></Loading>
+}
+else
+{
+    <div class="row">
+        <EditForm Model="@taskSearch">
+            <div class="row">
+                <div class="col">
+                    <label for="ip-task-name">Name</label>
+                    <InputText class="form-control" id="ip-task-name" @bind-Value="taskSearch.Name"></InputText>
+                </div>
+
+                <div class="col">
+                    <label for="ip-task-assignee">Assignee</label>
+                    <InputSelect class="form-control" id="ip-task-assignee" @bind-Value="taskSearch.AssigneeID">
+                        @foreach (var assignee in listUser)
+                        {
+                            <option selected="@((assignee.Id == listUser.First().Id))" value="@assignee.Id">@assignee.UserName</option>
+                        }
+                    </InputSelect>
+                </div>
+
+                <div class="col">
+                    <label for="">Priority</label>
+                    <InputSelect class="form-control" id="ip-task-priority" @bind-Value="taskSearch.Priority">
+                        @foreach (var item in Enum.GetNames(typeof(Priority)))
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </InputSelect>
+                </div>
+                <div class="col">
+                    <label for="">Status</label>
+                    <InputSelect id="ip-task-status" class="form-control" @bind-Value="taskSearch.Status">
+                        @foreach (var item in Enum.GetNames(typeof(Status)))
+                        {
+                            <option value="@item">@item</option>
+                        }
+                    </InputSelect>
+                </div>
+                <div class="col pt-4">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+    <div class="row mt-2">
+        <table class="table">
+            <thead>
+                <tr>
+                    @* <th>STT</th> *@
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>AssigneName</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                    <th>Create Date</th>
+                    <th>Function</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < myTaskDTOs.Count; i++)
+                {
+                    <tr>
+                        @* <td>@(i++)</td> *@
+                        <td>@myTaskDTOs[i].Name</td>
+                        <td>@myTaskDTOs[i].Description</td>
+                        <td>@(myTaskDTOs[i].AssigneeName ?? "N/A")</td>
+                        <td>@myTaskDTOs[i].Priority</td>
+                        <td>@myTaskDTOs[i].Status</td>
+                        <td>@myTaskDTOs[i].CreatedDate.ToString("dd/MM/yyyy")</td>
+                        <td><a href="/task-detail/@myTaskDTOs[i].Id">Detail</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+

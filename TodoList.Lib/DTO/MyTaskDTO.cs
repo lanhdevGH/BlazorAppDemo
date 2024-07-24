@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TodoList.Api.Enums;
+using TodoList.Lib.Enums;
 
 namespace TodoList.Lib.DTO
 {

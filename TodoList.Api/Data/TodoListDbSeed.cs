@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Net.WebSockets;
 using TodoList.Api.Entities;
+using TodoList.Lib.Enums;
 
 namespace TodoList.Api.Data
 {
@@ -50,8 +51,8 @@ namespace TodoList.Api.Data
                         AssigneeID = user == null ? user.Id : null,
                         CreatedDate = DateTime.Now,
                         UpdatedDate = DateTime.Now,
-                        Priority = Enums.Priority.Low,
-                        Status = Enums.Status.New,
+                        Priority = Priority.Low,
+                        Status = Status.New,
                     });
                 }
                 await context.SaveChangesAsync();

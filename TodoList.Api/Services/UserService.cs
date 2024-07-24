@@ -44,6 +44,7 @@ namespace TodoList.Api.Services
                     UserName = item.UserName,
                     Email = item.Email
                 };
+                userDTOs.Add(userDTO);
             }
 
             return userDTOs;

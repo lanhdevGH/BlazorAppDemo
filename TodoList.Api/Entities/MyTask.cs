@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using TodoList.Api.Enums;
+using TodoList.Lib.Enums;
 
 namespace TodoList.Api.Entities
 {
