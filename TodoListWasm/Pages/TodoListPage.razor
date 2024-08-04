@@ -21,9 +21,10 @@ else
                 <div class="col">
                     <label for="ip-task-assignee">Assignee</label>
                     <InputSelect class="form-control" id="ip-task-assignee" @bind-Value="taskSearch.AssigneeID">
+                        <option value="">Select an User</option>
                         @foreach (var assignee in listUser)
                         {
-                            <option selected="@((assignee.Id == listUser.First().Id))" value="@assignee.Id">@assignee.UserName</option>
+                            <option value="@assignee.Id">@assignee.UserName</option>
                         }
                     </InputSelect>
                 </div>
@@ -31,6 +32,7 @@ else
                 <div class="col">
                     <label for="">Priority</label>
                     <InputSelect class="form-control" id="ip-task-priority" @bind-Value="taskSearch.Priority">
+                        <option value="">Select Priority</option>
                         @foreach (var item in Enum.GetNames(typeof(Priority)))
                         {
                             <option value="@item">@item</option>
@@ -40,6 +42,7 @@ else
                 <div class="col">
                     <label for="">Status</label>
                     <InputSelect id="ip-task-status" class="form-control" @bind-Value="taskSearch.Status">
+                        <option value="">Select Status</option>
                         @foreach (var item in Enum.GetNames(typeof(Status)))
                         {
                             <option value="@item">@item</option>
@@ -47,16 +50,19 @@ else
                     </InputSelect>
                 </div>
                 <div class="col pt-4">
-                    <button class="btn btn-primary" type="submit">Search</button>
+                    <button class="btn btn-primary" type="submit" @onclick="SearchTaskForm">Search</button>
                 </div>
             </div>
         </EditForm>
+    </div>
+    <div>
+        <button class="btn btn-success"><a class="text-decoration-none text-white" href="/task-create">Create</a></button>
+
     </div>
     <div class="row mt-2">
         <table class="table">
             <thead>
                 <tr>
-                    @* <th>STT</th> *@
                     <th>Name</th>
                     <th>Description</th>
                     <th>AssigneName</th>
@@ -70,18 +76,18 @@ else
                 @for (int i = 0; i < myTaskDTOs.Count; i++)
                 {
                     <tr>
-                        @* <td>@(i++)</td> *@
                         <td>@myTaskDTOs[i].Name</td>
                         <td>@myTaskDTOs[i].Description</td>
                         <td>@(myTaskDTOs[i].AssigneeName ?? "N/A")</td>
-                        <td>@myTaskDTOs[i].Priority</td>
-                        <td>@myTaskDTOs[i].Status</td>
+                        <td><PriorityLabel Value="@myTaskDTOs[i].Priority" /></td>
+                        <td><StatusLabel Value="@myTaskDTOs[i].Status" /></td>
                         <td>@myTaskDTOs[i].CreatedDate.ToString("dd/MM/yyyy")</td>
-                        <td><a href="/task-detail/@myTaskDTOs[i].Id">Detail</a></td>
+                        <td>
+                            <button class="btn btn-primary"><a class="text-decoration-none text-white" href="/task-detail/@myTaskDTOs[i].Id">Detail</a></button>
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
 }
-

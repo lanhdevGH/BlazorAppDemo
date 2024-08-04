@@ -1,0 +1,27 @@
+﻿@using TodoList.Lib.Enums
+
+@switch (Value)
+{
+    case Status.New:
+        <span class="badge rounded-pill bg-primary">@nameof(Status.New)</span>
+        break;
+    case Status.Inprogress:
+        <span class="badge rounded-pill bg-secondary">@nameof(Status.Inprogress)</span>
+        break;
+    case Status.Resolved:
+        <span class="badge rounded-pill bg-success">@nameof(Status.Resolved)</span>
+        break;
+    case Status.Close:
+        <span class="badge rounded-pill bg-warning text-dark">@nameof(Status.Close)</span>
+        break;
+    case Status.Canceled:
+        <span class="badge rounded-pill bg-danger">@nameof(Status.Canceled)</span>
+        break;
+    default:
+        break;
+}
+
+@code {
+    [Parameter]
+    public Status Value { get; set; }
+}

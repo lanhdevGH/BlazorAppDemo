@@ -1,4 +1,23 @@
 ﻿@inherits LayoutComponentBase
+@using TodoList.Lib
+@using Blazored.Toast.Configuration
+
+<BlazoredToasts Position="ToastPosition.BottomRight"
+                Timeout="3"
+                IconType="IconType.FontAwesome"
+                SuccessIcon="fa fa-thumbs-up"
+                ErrorIcon="fa-solid fa-bug"
+                InfoIcon="fa-solid fa-info"
+                WarningIcon="fa-solid fa-triangle-exclamation"
+                ShowProgressBar="@true"
+                ShowCloseButton="@true"
+                MaxToastCount="5">
+    <CloseButtonContent>
+        <div>
+            <span class="fs-2">&times;</span>
+        </div>
+    </CloseButtonContent>
+</BlazoredToasts>
 <div class="page">
     <div class="sidebar">
         <NavMenu />

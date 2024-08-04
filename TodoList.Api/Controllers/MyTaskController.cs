@@ -17,9 +17,9 @@ namespace TodoList.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<MyTaskDTO>>> GetAllTask()
+        public async Task<ActionResult<IEnumerable<MyTaskDTO>>> GetAllTask([FromQuery] TaskSearch taskSearch)
         {
-            var listTasks = await _myTaskService.GetAllMyTasksAsync();
+            var listTasks = await _myTaskService.GetAllMyTasksAsync(taskSearch);
             
             return Ok(listTasks);
         }
@@ -36,7 +36,7 @@ namespace TodoList.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> CreateTask(MyTaskDTO instance)
+        public async Task<ActionResult> CreateTask([FromBody]TaskCreateRequest instance)
         {
             await _myTaskService.AddMyTaskAsync(instance);
             return CreatedAtAction(nameof(GetTaskById), new {id = instance.Id}, instance);

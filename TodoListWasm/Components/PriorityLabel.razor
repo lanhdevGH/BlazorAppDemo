@@ -1,0 +1,21 @@
+﻿@using TodoList.Lib.Enums
+
+@switch (Value)
+{
+    case Priority.High:
+        <span class="badge bg-danger">@nameof(Priority.High)</span>
+        break;
+    case Priority.Medium:
+        <span class="badge bg-warning text-dark">@nameof(Priority.Medium)</span>
+        break;
+    case Priority.Low:
+        <span class="badge bg-info text-dark">@nameof(Priority.Low)</span>
+        break;
+    default:
+        break;
+}
+
+@code {
+    [Parameter]
+    public Priority Value { get; set; }
+}

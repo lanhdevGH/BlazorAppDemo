@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using TodoList.Lib.Enums;
 using TodoList.Lib.DTO;
 using TodoListWasm.Services;
 
@@ -17,17 +16,14 @@ namespace TodoListWasm.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            myTaskDTOs = await _taskClientService.GetTaskList();
+            myTaskDTOs = await _taskClientService.GetTaskList(taskSearch);
             listUser = await _userClientService.GetAllUser();
         }
 
-    }
+        private async void SearchTaskForm()
+        {
+            myTaskDTOs = await _taskClientService.GetTaskList(taskSearch);
+        }
 
-    public class TaskSearch
-    {
-        public string Name { get; set; }
-        public Guid AssigneeID { get; set; }
-        public Priority Priority { get; set; }
-        public Status Status { get; set; }
     }
 }

@@ -1,0 +1,81 @@
+﻿@page "/task-create"
+@using TodoList.Lib.DTO
+@using TodoList.Lib.Enums
+@using TodoListWasm.Services
+@using TodoListWasm.Components
+
+
+@inject ITaskClientService _TaskClientService
+@inject NavigationManager _Navigate
+@inject IToastService toastService
+
+<div>
+    <h1>Create new Task</h1>
+    <EditForm Model="@myTaskCreate">
+        <DataAnnotationsValidator />
+        @* <ValidationSummary /> *@
+        <div class="row">
+            <div class="col">
+                <label for="ip-task-name">Name</label>
+                <InputText class="form-control" id="ip-task-name" @bind-Value="myTaskCreate.TaskName"></InputText>
+                <ValidationMessage For="() => myTaskCreate.TaskName" />
+            </div>
+            <div>
+                <label for="ip-task-descript">Description</label>
+                <InputText class="form-control" id="ip-task-descript" @bind-Value="myTaskCreate.TaskDescription"></InputText>
+                <ValidationMessage For="() => myTaskCreate.TaskDescription" />
+            </div>
+            <div class="col">
+                <label for="">Priority</label>
+                <InputSelect class="form-control" id="ip-task-priority" @bind-Value="myTaskCreate.Priority">
+                    <option value="">Select Priority</option>
+                    @foreach (var item in Enum.GetNames(typeof(Priority)))
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </InputSelect>
+            </div>
+            <div class="col w-100">
+                <label for="">Status</label>
+                <InputSelect id="ip-task-status" class="form-control" @bind-Value="myTaskCreate.Status">
+                    <option value="">Select Status</option>
+                    @foreach (var item in Enum.GetNames(typeof(Status)))
+                    {
+                        <option value="@item">@item</option>
+                    }
+                </InputSelect>
+            </div>
+            <div class="col">
+                <button type="submit" onclick="@OnCreateNewTask" class="btn btn-primary">Create new task</button>
+            </div>
+        </div>
+    </EditForm>
+
+</div>
+
+@code {
+    private TaskCreateRequest myTaskCreate;
+
+    public bool isShow { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        myTaskCreate = new TaskCreateRequest();
+    }
+
+    private async void OnCreateNewTask()
+    {
+        var result = await _TaskClientService.CreateNewTask(myTaskCreate);
+        if (result)
+        {
+            isShow = true;
+            toastService.ShowSuccess("Thêm mới task thành công");
+            await Task.Delay(500);
+            _Navigate.NavigateTo("/todo-list");
+        }
+        else
+        {
+
+        }
+    }
+}

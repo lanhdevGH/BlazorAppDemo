@@ -1,0 +1,53 @@
+﻿@using TodoList.Lib.DTO
+@using TodoListWasm.Services
+@inject IUserClientService _userClientService;
+
+<div class="col">
+    <label for="ip-task-assignee">Assignee</label>
+    <InputSelect class="form-control" id="ip-task-assignee" @bind-Value="SelectUserId" onchange="OnSelectChanged">
+        @foreach (var assignee in listUserSelect)
+        {
+            <option value="@assignee.Id">@assignee.UserName</option>
+        }
+    </InputSelect>
+</div>
+
+@code {
+    #region Variable
+    [Parameter] public Guid? SelectUserId { get; set; }
+    [Parameter] public EventCallback<Guid?> SelectedUser { get; set; }
+
+    private List<UserDTO> listUserSelect = new List<UserDTO>();
+    #endregion
+
+    #region Lifecicle Component
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadData();
+
+        if (listUserSelect.Any() && (SelectUserId == Guid.Empty || SelectUserId== null))
+        {
+            SelectUserId = listUserSelect.First().Id;
+        }
+    }
+
+    private async void OnSelectChanged(ChangeEventArgs eventArgs)
+    {
+        if (eventArgs.Value == null) return;
+        if (Guid.TryParse(eventArgs.Value.ToString(), out var selectedId))
+        {
+            SelectUserId = selectedId;
+            await SelectedUser.InvokeAsync(SelectUserId);
+        }
+    }
+    #endregion
+
+    #region Data
+    public async Task LoadData()
+    {
+        var result = await _userClientService.GetAllUser();
+        if(result == null) return;
+        listUserSelect.AddRange(result);
+    }
+    #endregion
+}

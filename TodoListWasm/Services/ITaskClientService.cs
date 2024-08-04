@@ -4,8 +4,10 @@ namespace TodoListWasm.Services
 {
     public interface ITaskClientService
     {
-        public Task<List<MyTaskDTO>?> GetTaskList();
+        public Task<List<MyTaskDTO>?> GetTaskList(TaskSearch taskSearch);
 
         public Task<MyTaskDTO?> GetTask(string taskId);
+
+        public Task<bool> CreateNewTask(TaskCreateRequest taskCreate);
     }
 }

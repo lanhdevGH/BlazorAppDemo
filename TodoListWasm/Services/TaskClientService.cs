@@ -12,6 +12,12 @@ namespace TodoListWasm.Services
             _httpClient = httpClient;   
         }
 
+        public async Task<bool> CreateNewTask(TaskCreateRequest taskCreate)
+        {
+            var result = await _httpClient.PostAsJsonAsync("/api/MyTask", taskCreate);
+            return result.IsSuccessStatusCode;
+        }
+
         public async Task<MyTaskDTO?> GetTask(string taskId)
         {
             var taskNewId = Guid.Parse(taskId);
@@ -19,10 +25,13 @@ namespace TodoListWasm.Services
             return result;
         }
 
-        public async Task<List<MyTaskDTO>?> GetTaskList()
+        public async Task<List<MyTaskDTO>?> GetTaskList(TaskSearch taskSearch)
         {
-            var result = await _httpClient.GetFromJsonAsync<List<MyTaskDTO>>("/api/MyTask");
+            string url = $"/api/MyTask?name={taskSearch.Name}&assigneeID={taskSearch.AssigneeID}&priority={taskSearch.Priority}&status={taskSearch.Status}";
+            var result = await _httpClient.GetFromJsonAsync<List<MyTaskDTO>>(url);
             return result;
         }
+
+
     }
 }
