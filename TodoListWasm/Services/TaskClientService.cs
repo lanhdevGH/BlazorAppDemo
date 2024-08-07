@@ -32,6 +32,11 @@ namespace TodoListWasm.Services
             return result;
         }
 
-
+        public async Task<bool> UpdateTaskByIdAsync(Guid id, TaskUpdateRequest taskCreate)
+        {
+            string url = $"/api/MyTask/{id}";
+            var result = await _httpClient.PutAsJsonAsync(url, taskCreate);
+            return result.IsSuccessStatusCode;
+        }
     }
 }

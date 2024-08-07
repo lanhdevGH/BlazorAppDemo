@@ -90,18 +90,17 @@ namespace TodoList.Api.Services
 
         public async Task UpdateMyTaskAsync(MyTaskDTO myTaskDTO)
         {
-            var task = new MyTask()
-            {
-                Id = myTaskDTO.Id,
-                Name = myTaskDTO.Name,
-                Description = myTaskDTO.Description,
-                AssigneeID = myTaskDTO.AssigneeID,
-                CreatedDate = myTaskDTO.CreatedDate,
-                UpdatedDate = myTaskDTO.UpdatedDate,
-                Priority = myTaskDTO.Priority,
-                Status = myTaskDTO.Status,
-            };
-            await _repoMyTaskRepository.UpdateAsync(task);
+            var taskUpd = await _repoMyTaskRepository.GetByIdAsync(myTaskDTO.Id);
+
+            taskUpd.Id = myTaskDTO.Id;
+            taskUpd.Name = myTaskDTO.Name;
+            taskUpd.Description = myTaskDTO.Description;
+            taskUpd.AssigneeID = myTaskDTO.AssigneeID;
+            taskUpd.CreatedDate = myTaskDTO.CreatedDate;
+            taskUpd.UpdatedDate = myTaskDTO.UpdatedDate;
+            taskUpd.Priority = myTaskDTO.Priority;
+            taskUpd.Status = myTaskDTO.Status;
+            await _repoMyTaskRepository.UpdateAsync(taskUpd);
         }
     }
 }

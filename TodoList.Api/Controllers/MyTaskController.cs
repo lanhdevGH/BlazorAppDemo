@@ -43,16 +43,24 @@ namespace TodoList.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTask(Guid id, MyTaskDTO instance)
+        public async Task<IActionResult> UpdateTask(Guid id, [FromBody] TaskUpdateRequest instance)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            if (id != instance.Id)
+            var taskUpd = await _myTaskService.GetMyTaskByIdAsync(id);
+
+            if (taskUpd == null)
             {
-                return BadRequest();
+                return NotFound($"{id} is not found");
             }
 
-            await _myTaskService.UpdateMyTaskAsync(instance);
+            taskUpd.Name = instance.Name;
+            taskUpd.Description = instance.Description;
+            taskUpd.Status = instance.Status;
+            taskUpd.Priority = instance.Priority;
+            taskUpd.UpdatedDate = DateTime.Now;
+
+            await _myTaskService.UpdateMyTaskAsync(taskUpd);
             return NoContent();
         }
 

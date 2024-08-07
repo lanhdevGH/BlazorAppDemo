@@ -9,5 +9,6 @@ namespace TodoListWasm.Services
         public Task<MyTaskDTO?> GetTask(string taskId);
 
         public Task<bool> CreateNewTask(TaskCreateRequest taskCreate);
+        public Task<bool> UpdateTaskByIdAsync(Guid id,TaskUpdateRequest taskCreate);
     }
 }

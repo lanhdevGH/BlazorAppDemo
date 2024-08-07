@@ -7,8 +7,7 @@ namespace TodoListWasm.Pages
     public partial class TaskDetail
     {
 
-        [Parameter]
-        public string? TaskId { get; set; }
+        [Parameter] public string? TaskId { get; set; }
         [Inject] private ITaskClientService taskClientService { set; get; }
 
         private MyTaskDTO? taskDTO { get; set; }
